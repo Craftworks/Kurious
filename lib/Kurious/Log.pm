@@ -3,21 +3,9 @@ package Kurious::Log;
 use Mojo::Base 'Mojo::Log';
 use Data::Dumper;
 
-has 'is_tty' => sub {
-    return -t shift->handle;
-};
-
-has 'has_ansi_color' => sub {
-    return eval { require Term::ANSIColor };
-};
-
-has 'is_color' => sub {
-    my $self = shift;
-    return $self->is_tty && $self->has_ansi_color;
-};
-
 our %Color = (
     'query' => 'magenta',
+    'dump'  => 'bold cyan',
     'debug' => 'cyan',
     'info'  => '',
     'warn'  => 'yellow',
@@ -34,6 +22,23 @@ our $Level = {
     'fatal' => 5,
 };
 
+has 'is_tty' => sub {
+    return -t shift->handle;
+};
+
+has 'has_ansi_color' => sub {
+    return eval { require Term::ANSIColor };
+};
+
+has 'is_color' => sub {
+    my $self = shift;
+    return $self->is_tty && $self->has_ansi_color;
+};
+
+has 'escseq' => sub {
+    +{ map { $_ => Term::ANSIColor::color($_) } values(%Color), 'reset' };
+};
+
 sub is_level {
     my ($self, $level) = @_;
     $Level->{ lc $level } >= $Level->{ $ENV{'MOJO_LOG_LEVEL'} || $self->level };
@@ -45,6 +50,7 @@ sub dump {
         = $Data::Dumper::Indent
         = $Data::Dumper::SortKeys = 1;
     my $message = Dumper \@_; chomp $message;
+    $message = $self->escseq->{ $Color{'dump'} } . $message;
     $self->debugf("$message at %s line %d", (caller)[0, 2]);
 }
 
@@ -54,9 +60,11 @@ sub log {
     my @messages = @_;
 
     if ( $self->is_color ) {
+        state $escseq = $self->escseq;
+        state $reset  = $escseq->{'reset'};
         my $color = $Color{ $level };
         if ( defined $color && length $color ) {
-            map { $_ = Term::ANSIColor::colored($_, $color) } @messages;
+            map { $_ = $escseq->{ $color } . $_ . $reset } @messages;
         }
     }
 
