@@ -7,8 +7,9 @@ use SQL::Abstract::Plugin::InsertMulti;
 
 has 'dbi' => sub { shift->driver('DBI')->dbi };
 has 'sql' => sub {
+    my $config = shift->config->{'Accessor::DBI'};
     SQL::Abstract::Limit->new(
-        'limit_dialect' => shift->config->{'limit_dialect'},
+        'limit_dialect' => $config->{'limit_dialect'} || 'LimitXY',
     );
 };
 
