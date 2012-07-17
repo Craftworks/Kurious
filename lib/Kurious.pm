@@ -20,6 +20,23 @@ sub startup {
     $self->plugin('HostConfig');
     $self->plugin('Container');
     $self->plugin('Architecture');
+
+    $self->startup_routes;
+
+    $self->types->type('json' => 'application/json; charset=utf-8');
+}
+
+sub startup_routes {
+    my $self = shift;
+
+    my $app_class = $self->home->app_class;
+
+    my $router_class = "$app_class\::Routes";
+    Mojo::Loader->load($router_class);
+
+    my $routes = $self->routes;
+    $routes->namespace("$app_class\::Controller");
+    $router_class->startup($routes);
 }
 
 my $time;
