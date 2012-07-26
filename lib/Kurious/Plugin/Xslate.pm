@@ -4,6 +4,8 @@ use Mojo::Base 'Mojolicious::Plugin';
 use MojoX::Renderer::Xslate;
 use Text::Xslate qw(html_builder mark_raw);
 use HTML::FillInForm;
+use URI;
+use URI::QueryParam;
 
 sub register {
     my ($self, $app, $conf) = @_;
@@ -29,6 +31,12 @@ sub register {
                 my $html = $raw->as_string;
                 return $fif->fill(\$html, \@vars);
             };
+        },
+        'query_param' => sub {
+            my ($uri, %params) = @_;
+            my $u = URI->new($uri);
+            $u->query_param(%params);
+            return $u;
         },
     };
 
