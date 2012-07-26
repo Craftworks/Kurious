@@ -2,8 +2,8 @@ package Kurious::Plugin::Xslate;
 
 use Mojo::Base 'Mojolicious::Plugin';
 use MojoX::Renderer::Xslate;
-use HTML::FillInForm;
 use Text::Xslate qw(html_builder mark_raw);
+use HTML::FillInForm;
 
 sub register {
     my ($self, $app, $conf) = @_;
@@ -14,6 +14,14 @@ sub register {
 
     my $fif = HTML::FillInForm->new;
     $template_options->{'function'} = +{
+        'css' => sub {
+            my $href = shift;
+            return mark_raw(qq{<link rel="stylesheet" href="$href">});
+        },
+        'script' => sub {
+            my $src = shift;
+            return mark_raw(qq{<script src="$src"></script>});
+        },
         'fillinform' => sub {
             my @vars = @_;
             return html_builder {
@@ -21,14 +29,6 @@ sub register {
                 my $html = $raw->as_string;
                 return $fif->fill(\$html, \@vars);
             };
-        },
-        'script' => sub {
-            my $src = shift;
-            return mark_raw(qq{<script src="$src"></script>});
-        },
-        'css' => sub {
-            my $href = shift;
-            return mark_raw(qq{<link rel="stylesheet" href="$href">});
         },
     };
 
