@@ -24,6 +24,12 @@ sub register {
             my $src = shift;
             return mark_raw(qq{<script src="$src"></script>});
         },
+        'nl2br' => sub {
+            my $str = shift;
+            $str =~ s/\x0D\x0A/<br>/go;
+            $str =~ s/[\x0D\x0A]/<br>/go;
+            return mark_raw($str);
+        },
         'fillinform' => sub {
             my @vars = @_;
             return html_builder {
