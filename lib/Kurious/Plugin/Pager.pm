@@ -13,7 +13,6 @@ sub register {
 sub set_pager {
     my ($self, $per_page) = @_;
 
-    $self->app->log->error('####');
     $per_page = int $per_page || 10;
 
     my $page = $self->param('page');
