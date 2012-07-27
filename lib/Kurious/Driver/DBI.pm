@@ -36,6 +36,7 @@ sub new {
 
         my $message = sprintf "(%.3fmsec/%dqps) %s; at %s line %d",
                     @params{qw(msec qps sql pkg line)};
+        $message =~ tr/\x0D\x0A//d;
 
         $self->log->can('query')
             ? $self->log->query($message)
