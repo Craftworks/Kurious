@@ -1,6 +1,7 @@
 package Kurious::Log;
 
 use Mojo::Base 'Mojo::Log';
+use Carp;
 use Data::Dumper;
 
 our %Color = (
@@ -72,11 +73,16 @@ sub log {
 }
 
 sub query  { shift->log('query' => @_) }
-sub debugf { shift->log('debug' => sprintf shift, @_) }
-sub infof  { shift->log('info'  => sprintf shift, @_) }
-sub warnf  { shift->log('warn'  => sprintf shift, @_) }
-sub errorf { shift->log('error' => sprintf shift, @_) }
-sub fatalf { shift->log('fatal' => sprintf shift, @_) }
+sub debugf { shift->logf('debug' => shift, @_) }
+sub infof  { shift->logf('info'  => shift, @_) }
+sub warnf  { shift->logf('warn'  => shift, @_) }
+sub errorf { shift->logf('error' => shift, @_) }
+sub fatalf { shift->logf('fatal' => shift, @_) }
+sub logf {
+    my ($self, $level, $format, @messages) = @_;
+    local $SIG{__WARN__} = *Carp::carp;
+    $self->log($level => sprintf $format, @messages);
+}
 
 sub is_query { shift->is_level('query') }
 
