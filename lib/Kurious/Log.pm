@@ -2,6 +2,7 @@ package Kurious::Log;
 
 use Mojo::Base 'Mojo::Log';
 use Carp;
+use POSIX 'strftime';
 use Data::Dumper;
 
 our %Color = (
@@ -70,6 +71,11 @@ sub log {
     }
 
     $self->SUPER::log($level, @messages);
+}
+
+sub format {
+    my ($self, $level, @msgs) = @_;
+    return strftime('[%Y-%m-%d %T]', localtime) . " [$level] @msgs\n";
 }
 
 sub query  { shift->log('query' => @_) }
