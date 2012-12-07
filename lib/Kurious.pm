@@ -11,10 +11,12 @@ sub import {
     shift->SUPER::import(@_);
 }
 
+my $log = __PACKAGE__->log;
 sub startup {
     my $self = shift;
 
     $self->log(Kurious::Log->new);
+    $log = $self->log;
 
     push @{ $self->plugins->namespaces }, 'Kurious::Plugin';
     $self->plugin('HostConfig');
@@ -43,7 +45,7 @@ my $time;
 BEGIN { $time = time }
 END {
     my $elapsed = time - $time;
-    __PACKAGE__->log->info(sprintf "Process took %.3f sec\n\n\n", $elapsed);
+    $log->info(sprintf "Process took %.3f sec\n\n\n", $elapsed);
 }
 
 1;
