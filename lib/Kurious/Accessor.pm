@@ -4,6 +4,7 @@ use Mojo::Base -base;
 use Data::Recursive::Encode;
 
 sub log       { shift->app->log }
+sub d         { shift->app->log->dump(@_) }
 sub config    { shift->app->config }
 sub accessor  { shift->app->accessor(@_) }
 sub driver    { shift->app->driver(@_) }

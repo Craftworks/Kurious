@@ -1,6 +1,7 @@
 package Kurious::Interface;
 use Mojo::Base -base;
 sub log       { shift->app->log }
+sub d         { shift->app->log->dump(@_) }
 sub config    { shift->app->config }
 sub interface { shift->app->interface(@_) }
 sub accessor  { shift->app->accessor(@_) }
