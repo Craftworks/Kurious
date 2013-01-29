@@ -54,6 +54,8 @@ sub dump {
     local $Data::Dumper::Terse
         = $Data::Dumper::Indent
         = $Data::Dumper::SortKeys = 1;
+
+    local $Carp::CarpLevel = $Carp::CarpLevel + 2;
     my $message = Dumper \@_; chomp $message;
     if ( $self->is_color ) {
         $message = $color . $message . $reset;
@@ -93,7 +95,8 @@ sub errorf { shift->logf('error' => shift, @_) }
 sub fatalf { shift->logf('fatal' => shift, @_) }
 sub logf {
     my ($self, $level, $format, @messages) = @_;
-    local $SIG{__WARN__} = *Carp::carp;
+    local $SIG{__WARN__} = local $SIG{__DIE__} = *Carp::confess;
+    local $Carp::CarpLevel = $Carp::CarpLevel + 2;
     $self->log($level => sprintf $format, @messages);
 }
 
