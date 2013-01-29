@@ -48,12 +48,19 @@ sub is_level {
 
 sub dump {
     my $self = shift;
+    state $color = $self->escseq->{ $Color{'dump'} };
+    state $reset = $self->escseq->{ 'reset' };
+
     local $Data::Dumper::Terse
         = $Data::Dumper::Indent
         = $Data::Dumper::SortKeys = 1;
     my $message = Dumper \@_; chomp $message;
-    $message = $self->escseq->{ $Color{'dump'} } . $message;
-    $self->debugf("$message at %s line %d", (caller)[0, 2]);
+    if ( $self->is_color ) {
+        $message = $color . $message . $reset;
+    }
+    $message .= sprintf ' at %s line %d', (caller)[0, 2];
+
+    $self->debug($message);
 }
 
 sub log {
