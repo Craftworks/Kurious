@@ -1,6 +1,6 @@
 package Kurious::Driver::DBI;
 
-use Mojo::Base 'Kurious::Driver';
+use Kurious::Base 'Kurious::Driver';
 use DBIx::Connector;
 
 has 'dbi' => sub {

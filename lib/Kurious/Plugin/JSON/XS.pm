@@ -1,6 +1,6 @@
 package Kurious::Plugin::JSON::XS;
 
-use Mojo::Base 'Mojolicious::Plugin';
+use Kurious::Base 'Mojolicious::Plugin';
 use JSON::XS;
 
 sub register {

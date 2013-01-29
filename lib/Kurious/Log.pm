@@ -1,6 +1,6 @@
 package Kurious::Log;
 
-use Mojo::Base 'Mojo::Log';
+use Kurious::Base 'Mojo::Log';
 use Carp;
 use POSIX 'strftime';
 use Data::Dumper;

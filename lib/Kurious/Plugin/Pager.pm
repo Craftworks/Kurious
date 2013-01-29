@@ -1,6 +1,6 @@
 package Kurious::Plugin::Pager;
 
-use Mojo::Base 'Mojolicious::Plugin';
+use Kurious::Base 'Mojolicious::Plugin';
 use POSIX ();
 
 sub register {

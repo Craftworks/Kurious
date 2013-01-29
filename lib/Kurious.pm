@@ -1,6 +1,6 @@
 package Kurious;
 
-use Mojo::Base 'Mojolicious';
+use Kurious::Base 'Mojolicious';
 use Time::HiRes 'time';
 use Kurious::Log;
 

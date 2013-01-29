@@ -1,6 +1,6 @@
 package Kurious::Accessor::DBI;
 
-use Mojo::Base 'Kurious::Accessor';
+use Kurious::Base 'Kurious::Accessor';
 use Carp;
 use SQL::Abstract::Limit;
 use SQL::Abstract::Plugin::InsertMulti;

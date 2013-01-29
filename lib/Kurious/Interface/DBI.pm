@@ -1,6 +1,6 @@
 package Kurious::Interface::DBI;
 
-use Mojo::Base 'Kurious::Interface';
+use Kurious::Base 'Kurious::Interface';
 use Carp;
 
 sub txn {

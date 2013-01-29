@@ -1,6 +1,6 @@
 package Kurious::Plugin::JSONP;
 
-use Mojo::Base 'Mojolicious::Plugin';
+use Kurious::Base 'Mojolicious::Plugin';
 use JSON::XS;
 
 has 'allow_callback' => 0;

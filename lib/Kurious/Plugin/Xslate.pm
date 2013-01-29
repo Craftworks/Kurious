@@ -1,6 +1,6 @@
 package Kurious::Plugin::Xslate;
 
-use Mojo::Base 'Mojolicious::Plugin';
+use Kurious::Base 'Mojolicious::Plugin';
 use MojoX::Renderer::Xslate;
 use Text::Xslate qw(html_builder mark_raw);
 use HTML::FillInForm;

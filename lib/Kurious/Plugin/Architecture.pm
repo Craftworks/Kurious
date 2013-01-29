@@ -1,6 +1,6 @@
 package Kurious::Plugin::Architecture;
 
-use Mojo::Base 'Mojolicious::Plugin';
+use Kurious::Base 'Mojolicious::Plugin';
 
 sub register {
     my ($self, $app, $conf) = @_;
