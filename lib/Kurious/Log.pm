@@ -16,11 +16,11 @@ our %Color = (
 );
 
 our $Level = {
-    'query' => 1, 
-    'debug' => 1, 
-    'info'  => 2, 
-    'warn'  => 3, 
-    'error' => 4, 
+    'query' => 1,
+    'debug' => 1,
+    'info'  => 2,
+    'warn'  => 3,
+    'error' => 4,
     'fatal' => 5,
 };
 
