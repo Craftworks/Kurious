@@ -4,6 +4,7 @@ use Kurious::Base 'Mojolicious::Plugin';
 use MojoX::Renderer::Xslate;
 use Text::Xslate qw(html_builder mark_raw);
 use HTML::FillInForm;
+use HTML::Packer;
 use URI;
 use URI::QueryParam;
 
@@ -33,7 +34,7 @@ sub register {
         'fillinform' => sub {
             my @vars = @_;
             return html_builder {
-                my $raw  = shift; # Text::Xslate::Type::Row
+                my $raw  = shift; # Text::Xslate::Type::Raw
                 my $html = $raw->as_string;
                 return $fif->fill(\$html, \@vars);
             };
@@ -43,6 +44,15 @@ sub register {
             my $u = URI->new($uri);
             $u->query_param(%params);
             return $u;
+        },
+        'minify' => sub {
+            state $packer = HTML::Packer->init;
+            my $opts = shift;
+            return html_builder {
+                my $raw  = shift; # Text::Xslate::Type::Raw
+                my $html = $raw->as_string;
+                return $packer->minify(\$html, $opts);
+            };
         },
     };
 
