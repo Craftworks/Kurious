@@ -5,6 +5,7 @@ use MojoX::Renderer::Xslate;
 use Text::Xslate qw(html_builder mark_raw);
 use HTML::FillInForm;
 use HTML::Packer;
+use JavaScript::Minifier::XS 'minify';
 use URI;
 use URI::QueryParam;
 
@@ -45,13 +46,20 @@ sub register {
             $u->query_param(%params);
             return $u;
         },
-        'minify' => sub {
+        'minify_html' => sub {
             state $packer = HTML::Packer->init;
             my $opts = shift;
             return html_builder {
                 my $raw  = shift; # Text::Xslate::Type::Raw
                 my $html = $raw->as_string;
                 return $packer->minify(\$html, $opts);
+            };
+        },
+        'minify_js' => sub {
+            return html_builder {
+                my $raw  = shift; # Text::Xslate::Type::Raw
+                my $html = $raw->as_string;
+                return minify($html);
             };
         },
     };
