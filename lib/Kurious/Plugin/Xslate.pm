@@ -28,6 +28,7 @@ sub register {
         },
         'nl2br' => sub {
             my $str = shift;
+            return unless defined $str and length $str;
             $str =~ s/\x0D\x0A/<br>/go;
             $str =~ s/[\x0D\x0A]/<br>/go;
             return mark_raw($str);
