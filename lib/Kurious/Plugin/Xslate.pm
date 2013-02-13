@@ -42,9 +42,10 @@ sub register {
             };
         },
         'query_param' => sub {
-            my ($uri, %params) = @_;
+            my ($uri, $params, $deletes) = @_;
             my $u = URI->new($uri);
-            $u->query_param(%params);
+            $u->query_param_delete($_) for (@$deletes);
+            $u->query_param(%$params);
             return $u;
         },
         'minify_html' => sub {
