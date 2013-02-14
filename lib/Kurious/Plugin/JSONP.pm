@@ -21,16 +21,10 @@ sub register {
         my $callback = $callback_param ? $c->param($callback_param) : undef;
         $self->validate_callback_param($callback) if $callback;
 
-        my $output;
         my $json_text = $json->encode($data);
+        $json_text =~ s/([<>\/\+])/sprintf("\\u%04x",ord($1))/eg;
 
-        # add UTF-8 BOM if the client is Safari
-        my $user_agent = $c->req->headers->user_agent || '';
-        if ( $user_agent  =~ /\bSafari\b/o and $user_agent !~ /\bChrome\b/o ) {
-            $output = "\xEF\xBB\xBF";
-        }
-
-        $output .= $callback ? "$callback($json_text)" : $json_text;
+        my $output = $callback ? "$callback($json_text)" : $json_text;
 
         $c->render_text($output, @args);
     });
