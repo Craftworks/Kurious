@@ -4,6 +4,7 @@ use Kurious::Base 'Mojolicious::Plugin';
 use MojoX::Renderer::Xslate;
 use Text::Xslate qw(html_builder mark_raw);
 use Class::Inspector;
+use POSIX 'strftime';
 use HTML::FillInForm;
 use HTML::Packer;
 use JavaScript::Minifier::XS 'minify';
@@ -64,6 +65,16 @@ sub __function_query_param {
     $u->query_param_delete($_) for (@$deletes);
     $u->query_param(%$params);
     return $u;
+}
+
+sub __function_strftime {
+    my ($format, $time, $tz) = @_;
+
+    $time ||= time;
+    $tz   ||= 'UTC';
+
+    local $ENV{'TZ'} = $tz;
+    return strftime($format, localtime $time);
 }
 
 sub __function_minify_html {
