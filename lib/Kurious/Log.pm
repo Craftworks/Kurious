@@ -65,6 +65,12 @@ sub dump {
     $self->debug($message);
 }
 
+sub fatal {
+    my $message = shift->log(fatal => @_);
+    local $Carp::CarpLevel += 1;
+    confess $message;
+}
+
 sub log {
     my $self  = shift;
     my $level = lc shift;
@@ -94,7 +100,12 @@ sub debugf { shift->logf('debug' => shift, @_) }
 sub infof  { shift->logf('info'  => shift, @_) }
 sub warnf  { shift->logf('warn'  => shift, @_) }
 sub errorf { shift->logf('error' => shift, @_) }
-sub fatalf { shift->logf('fatal' => shift, @_) }
+sub fatalf {
+    my $message = shift->logf('fatal' => shift, @_);
+    local $Carp::CarpLevel += 1;
+    confess $message;
+}
+
 sub logf {
     my ($self, $level, $format, @messages) = @_;
     local $SIG{__WARN__} = local $SIG{__DIE__} = *Carp::confess;
