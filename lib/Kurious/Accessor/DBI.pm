@@ -25,9 +25,8 @@ sub _do {
 
     # handle error
     if ( my $errstr = $dbi->dbh->errstr ) {
-        $self->log->error($errstr);
         local $Carp::CarpLevel = 2;
-        confess;
+        confess $self->log->error($errstr);
     }
 
     return $rows;
