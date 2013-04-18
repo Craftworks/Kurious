@@ -80,6 +80,8 @@ sub log {
     }
 
     $self->SUPER::log($level, @messages);
+
+    return "@messages";
 }
 
 sub format {
