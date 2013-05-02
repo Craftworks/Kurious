@@ -14,4 +14,31 @@ sub action_path {
     return lc $action;
 }
 
+sub template_dir {
+    return '.';
+}
+
+sub template_renderer {
+    my ($self, $template) = @_;
+
+    my %opts;
+
+    $template ||= $self->stash->{'template_name'} || $self->action_path;
+
+    $opts{'format'}   = $self->stash('format') || 'html';
+    $opts{'handler'}  = $self->stash('handler') || 'tx';
+
+    my $template_dir = $self->template_dir;
+    my $filename     = join '.', $template, @opts{qw/format handler/};
+
+    $opts{'template'} = File::Spec->catfile($template_dir, 'layout');
+    $opts{'content'}  = File::Spec->catfile($template_dir, $filename);
+
+    $opts{'env'}  = \%ENV;
+
+    return sub {
+        $self->render(%opts);
+    };
+}
+
 1;
