@@ -42,4 +42,18 @@ sub template_renderer {
     };
 }
 
+sub json_renderer {
+    my $self = shift;
+
+    my @caller = (caller 1)[0,2];
+    my $message = "render_json() requires variable \$self->stash('json')"
+                . " at %s line %d";
+
+    return sub {
+        my $json = $self->stash('json');
+        $self->log->warnf($message, @caller) unless defined $json;
+        $self->render_json($json);
+    }
+}
+
 1;
