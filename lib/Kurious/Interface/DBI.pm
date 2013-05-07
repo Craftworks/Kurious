@@ -3,6 +3,8 @@ package Kurious::Interface::DBI;
 use Kurious::Base 'Kurious::Interface';
 use Carp;
 
+has 'numrows';
+
 sub txn {
     my ($self, $code) = @_;
 

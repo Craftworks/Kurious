@@ -13,6 +13,8 @@ has 'sql' => sub {
     );
 };
 
+has 'found_rows';
+
 sub run { shift->_do('run', @_) }
 sub txn { shift->_do('txn', @_) }
 sub _do {
@@ -30,6 +32,13 @@ sub _do {
     }
 
     return $rows;
+}
+
+sub set_found_rows {
+    my $self = shift;
+
+    my ($rows) = $self->dbi->dbh->selectrow_array('SELECT FOUND_ROWS()');
+    $self->found_rows($rows);
 }
 
 1;
