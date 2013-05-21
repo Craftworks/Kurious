@@ -24,7 +24,7 @@ sub template_renderer {
     return sub {
         my %opts;
 
-        $template ||= $self->stash->{'template_name'} || $self->action_path;
+        $template ||= $self->stash->{'template'} || $self->action_path;
 
         $opts{'format'}   = $self->stash('format') || 'html';
         $opts{'handler'}  = $self->stash('handler') || 'tx';
