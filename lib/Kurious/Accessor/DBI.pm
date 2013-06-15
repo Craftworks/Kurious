@@ -4,6 +4,7 @@ use Kurious::Base 'Kurious::Accessor';
 use Carp;
 use SQL::Abstract::Limit;
 use SQL::Abstract::Plugin::InsertMulti;
+use Encode ();
 
 has 'dbi' => sub { shift->driver('DBI')->dbi };
 has 'sql' => sub {
@@ -39,6 +40,19 @@ sub set_found_rows {
 
     my ($rows) = $self->dbi->dbh->selectrow_array('SELECT FOUND_ROWS()');
     $self->found_rows($rows);
+}
+
+sub decode_utf8 {
+    my ($self, $rows, @fields) = @_;
+
+    $rows = [ $rows ] unless ref $rows eq 'ARRAY';
+
+    for my $row (@$rows) {
+        for (@fields) {
+            next unless defined $row->{ $_ } && length $row->{ $_ };
+            $row->{ $_ } = Encode::decode_utf8($row->{ $_ });
+        }
+    }
 }
 
 1;
