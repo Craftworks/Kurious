@@ -38,7 +38,7 @@ sub __function_css {
 
 sub __function_script {
     my $src = shift;
-    return mark_raw(qq{<script src="$src"></script>});
+    return mark_raw(qq{<script src="$src" async defer></script>});
 }
 
 sub __function_nl2br {
