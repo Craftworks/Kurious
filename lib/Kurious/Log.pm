@@ -48,19 +48,26 @@ sub is_level {
 
 sub dump {
     my $self = shift;
-    state $color = $self->escseq->{ $Color{'dump'} };
-    state $reset = $self->escseq->{ 'reset' };
+    state $color = $self->is_color ? $self->escseq->{ $Color{'dump'} } : '';
+    state $reset = $self->is_color ? $self->escseq->{ 'reset' } : '';
 
     local $Data::Dumper::Terse
         = $Data::Dumper::Indent
         = $Data::Dumper::SortKeys = 1;
 
-    local $Carp::CarpLevel = $Carp::CarpLevel + 2;
+    my @caller;
+    unless ( caller 1 ) {
+        @caller = caller;
+    }
+    else {
+        @caller = substr((caller 1)[3], -3) eq '::d' ? (caller 2) : (caller 1);
+    }
+
     my $message = Dumper \@_; chomp $message;
     if ( $self->is_color ) {
         $message = $color . $message . $reset;
     }
-    $message .= sprintf ' at %s line %d', (caller)[0, 2];
+    $message .= sprintf ' at %s line %d', @caller[0, 2];
 
     $self->debug($message);
 }
