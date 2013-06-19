@@ -98,4 +98,15 @@ sub __function_minify_js {
     };
 }
 
+my @stash;
+sub __function_stash_push {
+    return html_builder {
+        push @stash, shift->as_string;
+        return;
+    };
+}
+sub __function_stash_pop {
+    return mark_raw(pop @stash);
+}
+
 1;
