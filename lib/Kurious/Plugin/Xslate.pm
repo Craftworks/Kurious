@@ -38,7 +38,10 @@ sub __function_css {
 
 sub __function_script {
     my $src = shift;
-    return mark_raw(qq{<script src="$src" async defer></script>});
+    my $html = qq{<script src="$src"};
+    $html .= ' ' . join ' ', @_ if @_;
+    $html .= q{></script>};
+    return mark_raw($html);
 }
 
 sub __function_nl2br {
