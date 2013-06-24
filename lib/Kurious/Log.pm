@@ -88,7 +88,8 @@ sub log {
         state $reset  = $escseq->{'reset'};
         my $color = $Color{ $level };
         if ( defined $color && length $color ) {
-            map { $_ = $escseq->{ $color } . $_ . $reset } @messages;
+            map { $_ = defined $_
+                    ? $escseq->{ $color } . $_ . $reset : '' } @messages;
         }
     }
 
