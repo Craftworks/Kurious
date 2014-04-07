@@ -60,7 +60,7 @@ sub dump {
         @caller = caller;
     }
     else {
-        @caller = substr((caller 1)[3], -3) eq '::d' ? (caller 2) : (caller 1);
+        @caller = substr((caller 1)[3], -3) eq '::d' ? (caller 1) : (caller 0);
     }
 
     my $message = Dumper \@_; chomp $message;
