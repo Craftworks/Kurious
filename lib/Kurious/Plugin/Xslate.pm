@@ -6,8 +6,6 @@ use Text::Xslate qw(html_builder mark_raw);
 use Class::Inspector;
 use POSIX 'strftime';
 use HTML::FillInForm;
-use HTML::Packer;
-use JavaScript::Minifier::XS 'minify';
 use URI;
 use URI::QueryParam;
 
@@ -81,6 +79,8 @@ sub __function_strftime {
 }
 
 sub __function_minify_html {
+    require HTML::Packer;
+    HTML::Packer->import;
     state $packer = HTML::Packer->init;
     my $opts = shift;
     return html_builder {
@@ -91,10 +91,11 @@ sub __function_minify_html {
 }
 
 sub __function_minify_js {
+    require JavaScript::Minifier::XS;
     return html_builder {
         my $raw  = shift; # Text::Xslate::Type::Raw
         my $html = $raw->as_string;
-        return minify($html);
+        return JavaScript::Minifier::XS::minify($html);
     };
 }
 
