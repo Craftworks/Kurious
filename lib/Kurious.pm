@@ -45,7 +45,7 @@ my $time;
 BEGIN { $time = time }
 END {
     my $elapsed = time - $time;
-    $log->info(sprintf "Process took %.3f sec\n\n\n", $elapsed);
+    $log->info(sprintf "Process took %.3f sec\n\n", $elapsed);
 }
 
 1;
