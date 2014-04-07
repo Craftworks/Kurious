@@ -116,5 +116,8 @@ sub __function_stash_push {
 sub __function_stash_pop {
     return mark_raw(pop @stash);
 }
+sub __function_stash_slurp {
+    return mark_raw(join '', splice @stash, 0, @stash);
+}
 
 1;
