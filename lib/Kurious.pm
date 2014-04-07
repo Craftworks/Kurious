@@ -1,6 +1,6 @@
 package Kurious;
 
-use Kurious::Base 'Mojolicious';
+use Mojo::Base 'Mojolicious';
 use Time::HiRes 'time';
 use Kurious::Log;
 
@@ -11,7 +11,7 @@ sub import {
     shift->SUPER::import(@_);
 }
 
-my $log = __PACKAGE__->log;
+my $log;
 sub startup {
     my $self = shift;
 
@@ -31,13 +31,13 @@ sub startup {
 sub startup_routes {
     my $self = shift;
 
-    my $app_class = $self->home->app_class;
+    my $app_class = ref $self;
 
     my $router_class = "$app_class\::Routes";
     Mojo::Loader->load($router_class);
 
     my $routes = $self->routes;
-    $routes->namespace("$app_class\::Controller");
+    $routes->namespaces([ "$app_class\::Controller" ]);
     $router_class->startup($routes);
 }
 

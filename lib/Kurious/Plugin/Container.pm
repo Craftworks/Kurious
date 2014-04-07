@@ -1,6 +1,6 @@
 package Kurious::Plugin::Container;
 
-use Kurious::Base 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 use Carp;
 use UNIVERSAL::require;
 

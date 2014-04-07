@@ -1,6 +1,6 @@
 package Kurious::Plugin::Architecture;
 
-use Kurious::Base 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 
 sub register {
     my ($self, $app, $conf) = @_;
@@ -9,7 +9,7 @@ sub register {
         $app->helper(lc $component => sub {
             my ($self, $name) = @_;
 
-            my $app_class = $app->home->app_class;
+            my $app_class = ref $app;
             my $class = "$app_class\::$component\::$name";
 
             local $Carp::CarpLevel = 3;

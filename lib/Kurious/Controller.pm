@@ -7,7 +7,7 @@ sub action_path {
     my $self = shift;
 
     my $caller = (caller 4)[3];
-    my $app_class = $self->app->home->app_class;
+    my $app_class = ref $self->app;
     my $action = substr $caller, length("$app_class\::Controller::");
     $action =~ s{::}{/}go;
 

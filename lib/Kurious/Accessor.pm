@@ -1,6 +1,6 @@
 package Kurious::Accessor;
 
-use Kurious::Base -base;
+use Mojo::Base -base;
 use Data::Recursive::Encode;
 
 sub log       { shift->app->log }
