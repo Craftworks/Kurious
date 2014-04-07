@@ -2,9 +2,10 @@ package Kurious::Plugin::Xslate;
 
 use Kurious::Base 'Mojolicious::Plugin';
 use MojoX::Renderer::Xslate;
-use Text::Xslate qw(html_builder mark_raw);
+use Text::Xslate qw(html_builder mark_raw unmark_raw html_escape);
 use Class::Inspector;
 use POSIX 'strftime';
+use Scalar::Util 'blessed';
 use HTML::FillInForm;
 use URI;
 use URI::QueryParam;
@@ -83,6 +84,28 @@ sub __function_strftime {
 
     local $ENV{'TZ'} = $tz;
     return strftime($format, localtime $time);
+}
+
+sub __function_json {
+    my $vars = shift;
+
+    require Data::Rmap;
+    require JSON::XS;
+    state $json = JSON::XS->new->ascii;
+
+    Data::Rmap::rmap_to(sub {
+        Data::Rmap::cut($_) if blessed($_);
+        return if ref;
+        $_ = unmark_raw(html_escape($_));
+    }, Data::Rmap::ALL(), $vars);
+
+    my $str = $json->encode($vars);
+    my $bs = '\\';
+    $str =~ s!/!${bs}/!g;
+    $str =~ s!<!${bs}u003c!g;
+    $str =~ s!>!${bs}u003e!g;
+    $str =~ s!&!${bs}u0026!g;
+    Text::Xslate::mark_raw($str);
 }
 
 sub __function_minify_html {
