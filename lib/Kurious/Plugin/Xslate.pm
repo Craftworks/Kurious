@@ -50,6 +50,13 @@ sub __function_nl2br {
     return mark_raw($str);
 }
 
+sub __function_commify {
+    local $_ = shift;
+    return unless defined and length;
+    1 while s/^([-+]?\d+)(\d\d\d)/$1,$2/o;
+    $_;
+}
+
 sub __function_fillinform {
     my @vars = @_;
     state $fif = HTML::FillInForm->new;
