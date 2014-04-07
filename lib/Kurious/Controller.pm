@@ -56,4 +56,9 @@ sub json_renderer {
     }
 }
 
+sub render_html {
+    my ($self, $template) = @_;
+    $self->SUPER::respond_to('html' => $self->template_renderer($template));
+}
+
 1;
