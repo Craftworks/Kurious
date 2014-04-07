@@ -60,7 +60,7 @@ sub __function_commify {
 
 sub __function_fillinform {
     my @vars = @_;
-    state $fif = HTML::FillInForm->new;
+    my $fif = HTML::FillInForm->new;
     return html_builder {
         my $raw  = shift; # Text::Xslate::Type::Raw
         my $html = $raw->as_string;
