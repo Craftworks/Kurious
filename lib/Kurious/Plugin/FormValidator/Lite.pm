@@ -63,7 +63,7 @@ sub error_messages {
             = $validator->get_error_messages_from_param($name);
     }
 
-    $validator->{'_error_messages'} || [];
+    $validator->{'_error_messages'} || +{};
 }
 
 1;
