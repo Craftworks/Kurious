@@ -4,6 +4,7 @@ use Mojo::Base 'Mojo::Log';
 use Carp;
 use POSIX 'strftime';
 use Data::Dumper;
+use Encode;
 
 our %Color = (
     'query' => 'magenta',
@@ -39,6 +40,13 @@ has 'is_color' => sub {
 
 has 'escseq' => sub {
     +{ map { $_ => Term::ANSIColor::color($_) } values(%Color), 'reset' };
+};
+
+has 'encoding' => sub {
+    my $name = $ENV{'MOJO_LOG_ENCODING'} || 'UTF-8';
+    my $enc = Encode::find_encoding($name);
+    Carp::croak(qq{encoding "$name" not found}) unless ref $enc;
+    return $enc;
 };
 
 sub is_level {
@@ -81,7 +89,7 @@ sub fatal {
 sub log {
     my $self  = shift;
     my $level = lc shift;
-    my @messages = @_;
+    my @messages = map $self->encoding->encode($_), @_;
 
     if ( $self->is_color ) {
         state $escseq = $self->escseq;
