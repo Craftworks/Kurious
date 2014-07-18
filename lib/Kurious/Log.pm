@@ -89,7 +89,7 @@ sub fatal {
 sub log {
     my $self  = shift;
     my $level = lc shift;
-    my @messages = map $self->encoding->encode($_), @_;
+    my @messages = map { defined($_) ? $self->encoding->encode($_) : '' } @_;
 
     if ( $self->is_color ) {
         state $escseq = $self->escseq;
