@@ -91,6 +91,9 @@ sub log {
     my $level = lc shift;
     my @messages = map { defined($_) ? $self->encoding->encode($_) : '' } @_;
 
+    my @caller = caller 1;
+    push @messages, sprintf 'at %s line %s', @caller[0,2];
+
     if ( $self->is_color ) {
         state $escseq = $self->escseq;
         state $reset  = $escseq->{'reset'};
