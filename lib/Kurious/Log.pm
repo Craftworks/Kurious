@@ -89,7 +89,11 @@ sub fatal {
 sub log {
     my $self  = shift;
     my $level = lc shift;
-    my @messages = map { defined($_) ? $self->encoding->encode($_) : '' } @_;
+    my @messages = @_;
+    state $enc = $self->encoding;
+
+    # encode
+    (defined && length) ? $enc->encode($_) : '' for @messages;
 
     my @caller = caller 1;
     push @messages, sprintf 'at %s line %s', @caller[0,2];
