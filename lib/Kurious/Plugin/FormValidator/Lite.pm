@@ -31,8 +31,11 @@ sub register {
 sub _new {
     my ($next, $c, $action, $last) = @_;
 
+    state $default_language = $c->config('default_language');
+
     my $accept_language = HTTP::AcceptLanguage->new($c->req->headers->accept_language);
-    my $lang = $accept_language->match(@$languages);
+    my $lang = $accept_language->match(@$languages)
+            || $default_language || 'en';
 
     my $validator = FormValidator::Lite->new($c->req->params);
     $validator->load_function_message($lang);
