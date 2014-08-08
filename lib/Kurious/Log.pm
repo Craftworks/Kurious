@@ -93,7 +93,10 @@ sub log {
     state $enc = $self->encoding;
 
     # encode
-    (defined && length) ? $enc->encode($_) : '' for @messages;
+    for (@messages) {
+        $_ = $enc->encode($_) if defined && utf8::is_utf8($_);
+        $_ = '' if not defined;
+    }
 
     my @caller = caller 1;
     push @messages, sprintf 'at %s line %s', @caller[0,2];
