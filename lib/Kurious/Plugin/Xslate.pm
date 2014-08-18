@@ -129,6 +129,40 @@ sub __function_minify_js {
     };
 }
 
+sub __function_youtube_embed_url {
+    my $url = shift;
+
+    if ( $url =~ m{(?:youtu.be/|youtube.com/(?:watch\?(?:.*&)?v=|(?:embed|v)/))([^?&"'>]+)}o ) {
+        $url = $1;
+        return "//www.youtube.com/embed/$1";
+    }
+    else {
+        return '';
+    }
+}
+
+sub __function_slideshare_embed_url {
+    my $url = shift;
+
+    if ( $url =~ m{(//www\.slideshare\.net/slideshow/embed_code/\d+)}o ) {
+        return $1;
+    }
+    else {
+        return '';
+    }
+}
+
+sub __function_itunes_id {
+    my $url = shift;
+
+    if ( $url =~ m{id(\d+)}o ) {
+        return $1;
+    }
+    else {
+        return '';
+    }
+}
+
 my @stash;
 sub __function_stash_push {
     return html_builder {
