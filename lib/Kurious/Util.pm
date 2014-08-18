@@ -3,7 +3,14 @@ package Kurious::Util;
 use Mojo::Base -strict;
 use Exporter::Lite;
 
-our @EXPORT = qw(rows2kv rows2krows);
+our @EXPORT = qw(crlf2lf rows2kv rows2krows);
+
+sub crlf2lf {
+    local $_ = shift;
+    s/\x0D\x0A/\n/go;
+    tr/\x0D\x0A/\n\n/;
+    return $_;
+}
 
 sub rows2kv {
     my ($rows, $key) = @_;
