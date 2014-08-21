@@ -37,7 +37,7 @@ sub _new {
     my $lang = $accept_language->match(@$languages)
             || $default_language || 'en';
 
-    my $validator = FormValidator::Lite->new($c->req->params);
+    my $validator = FormValidator::Lite->new($c->req);
     $validator->load_function_message($lang);
     $validator->set_message_data($message_data->{ $lang });
     $c->stash('validator' => $validator);
