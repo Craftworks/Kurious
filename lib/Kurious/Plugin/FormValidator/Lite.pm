@@ -39,7 +39,10 @@ sub _new {
 
     my $validator = FormValidator::Lite->new($c->req);
     $validator->load_function_message($lang);
-    $validator->set_message_data($message_data->{ $lang });
+
+    my $data = $message_data->{ $lang } || $message_data->{ $default_language };
+    $validator->set_message_data($data);
+
     $c->stash('validator' => $validator);
 
     return $next->();
