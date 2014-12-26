@@ -6,8 +6,10 @@ sub register {
     my ($self, $app, $conf) = @_;
 
     $app->helper('psgi_session' => sub {
-        my $c = shift;
-        return $c->req->env->{'psgix.session'};
+        my ($c, @args) = @_;
+        return $c->req->env->{'psgix.session'} unless @args;
+        my %args = @args % 2 ? %{ $args[0] } : @args;
+        $c->req->env->{'psgix.session'} = \%args;
     });
 
     $app->helper('psgi_session_change_id'  => sub {
